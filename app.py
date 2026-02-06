@@ -18,11 +18,11 @@ st.set_page_config(
 st.title("AI (Astore Insights) Hub")
 
 # =====================================================
-# ESG SCORECARD (SINGLE LOCATION - BETWEEN TITLE AND TABS)
+# ESG SCORECARD (WITH TENTATIVE DATA NOTE)
 # =====================================================
 def display_esg_scorecard():
     """Displays ESG scorecard with estimated KPIs"""
-    st.markdown("### 📊 ESG Performance Scorecard")
+    st.markdown("### 📊 ESG Performance Scorecard *(Tentative Data)*")
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
@@ -102,7 +102,7 @@ def call_perplexity(prompt, temperature=0.2):
         return f"Error calling Perplexity API: {e}"
 
 # =====================================================
-# TAB 1 — INDUSTRY & CATEGORY INTELLIGENCE
+# TAB 1 — INDUSTRY & CATEGORY INTELLIGENCE (IMPROVED OUTPUT)
 # =====================================================
 with tab1:
     st.header("Industry & Category Intelligence")
@@ -144,39 +144,48 @@ Focus area: {focus_area}
 Region: {geography}
 Timeframe: {timeframe}
 
-Provide 4–5 hospitality-relevant intelligence items covering recent developments, trends, and procurement implications.
+**CRITICAL FORMATTING REQUIREMENTS:**
+- MAXIMUM 4 intelligence items only
+- Number them **1.**, **2.**, **3.**, **4.** clearly
+- Each item must follow EXACT structure below:
 
-For each intelligence item, provide:
+**HEADLINE:** [concise headline]
 
-**HEADLINE:** Clear, specific title
+**WHAT HAPPENED:** [1-2 sentences only]
 
-**WHAT HAPPENED:** Brief summary (2–3 sentences) of the development, trend, or news
+**WHY IT MATTERS:** [MAX 100 words, use BULLET POINTS only]
+• Cost impact
+• Supply chain implications  
+• ESG relevance
+• Risks/Opportunities
 
-**WHY IT MATTERS FOR PROCUREMENT:** Direct implications for Astore category managers
-- Cost impact (increase/decrease)
-- Supply chain implications
-- ESG/sustainability relevance (how does this impact ESG KPIs?)
-- Risk considerations
-- Opportunity identification
+**ACTION:** [1 specific next step]
 
-**RECOMMENDED ACTION:** Specific next step (e.g., "Engage suppliers on X", "Monitor Y closely", "Prepare contingency for Z")
+**SOURCE:** [source + date]
 
-**SOURCE:** Cite source and date
+**ESG KPI IMPACT:** [1 sentence on scorecard impact]
 
-**ESG KPI IMPACT:** How does this affect key ESG metrics (data coverage, Scope 3 emissions, supplier diversity)?
+**EXAMPLE FORMAT:**
+1. **HEADLINE:** German housekeeping wage increase announced
 
-Focus on:
-- Market trends affecting hospitality services
-- Supplier developments (M&A, innovations, challenges)
-- Regulatory changes (especially ESG-related)
-- Price movements and cost drivers
-- Technology and innovation
-- Labor market dynamics
+**WHAT HAPPENED:** New minimum wage regulation in DACH region...
 
-Prioritize actionable, procurement-relevant insights. Be specific and current ({timeframe}).
+**WHY IT MATTERS:**
+• Cost: +8-12% expected
+• ESG: Labor compliance risk
+• Opportunity: Local supplier advantage
+
+**ACTION:** Review DACH housekeeping contracts by Q1 end
+
+**SOURCE:** German Federal Ministry, Jan 2026
+
+**ESG KPI IMPACT:** Impacts labor compliance KPI
+
+Prioritize actionable, procurement-relevant insights. Be concise and current ({timeframe}).
 """
         with st.spinner("Gathering latest intelligence and market insights..."):
-            content = call_perplexity(prompt, temperature=0.2)
+            content = call_perplexity(prompt, temperature=0.15)  # Lower temp for consistency
+            st.markdown("### **Intelligence Brief**")
             st.markdown(content)
 
 # =====================================================
@@ -257,7 +266,7 @@ Include ESG and decarbonisation considerations throughout.
             st.markdown(content)
 
 # =====================================================
-# TAB 3 — SUPPLIER INTELLIGENCE (NO ESG IN TITLE)
+# TAB 3 — SUPPLIER INTELLIGENCE
 # =====================================================
 with tab3:
     st.header("Supplier Intelligence")
