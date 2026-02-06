@@ -18,6 +18,63 @@ st.set_page_config(
 
 st.title("AI (Astore Insights) Hub")
 
+# =====================================================
+# ESG SCORECARD (NEW - APPEARS ON EVERY TAB)
+# =====================================================
+def display_esg_scorecard(tab_context="general"):
+    """Displays ESG scorecard with estimated KPIs"""
+    col1, col2, col3, col4, col5 = st.columns(5)
+    
+    with col1:
+        st.metric(
+            label="ESG Data Coverage",
+            value="62%",
+            delta="↗ +4%",
+            delta_color="normal",
+            help="Percentage of suppliers reporting ESG data (Target: 85% by 2027)"
+        )
+    
+    with col2:
+        st.metric(
+            label="Spend with ESG Suppliers",
+            value="€48M / €92M",
+            delta="↗ +12%",
+            delta_color="normal",
+            help="Spend with ESG-rated suppliers vs total services spend"
+        )
+    
+    with col3:
+        st.metric(
+            label="Scope 3 Emissions",
+            value="1,247 tCO₂e",
+            delta="↘ -3%",
+            delta_color="inverse",
+            help="Services category emissions (Target: 35% reduction by 2028)"
+        )
+    
+    with col4:
+        st.metric(
+            label="ESG Tenders",
+            value="78%",
+            delta="↗ +15%",
+            delta_color="normal",
+            help="% of tenders with ESG criteria (Target: 100%)"
+        )
+    
+    with col5:
+        st.metric(
+            label="Diversity Suppliers",
+            value="14%",
+            delta="↗ +2%",
+            delta_color="normal",
+            help="% spend with diverse/local suppliers (Target: 25%)"
+        )
+    
+    st.markdown("---")
+
+# Call scorecard once at top
+display_esg_scorecard("dashboard")
+
 tab1, tab2, tab3, tab4 = st.tabs([
     "Industry & Category Intelligence",
     "Category Strategy",
@@ -45,11 +102,14 @@ def call_perplexity(prompt, temperature=0.2):
         return f"Error calling Perplexity API: {e}"
 
 # =====================================================
-# TAB 1 — INDUSTRY & CATEGORY INTELLIGENCE (YOUR ORIGINAL)
+# TAB 1 — INDUSTRY & CATEGORY INTELLIGENCE
 # =====================================================
 with tab1:
     st.header("Industry & Category Intelligence")
-
+    
+    # Tab-specific scorecard context
+    display_esg_scorecard("intelligence")
+    
     focus_area = st.selectbox(
         "Focus area",
         [
@@ -97,13 +157,15 @@ For each intelligence item, provide:
 **WHY IT MATTERS FOR PROCUREMENT:** Direct implications for Astore category managers
 - Cost impact (increase/decrease)
 - Supply chain implications
-- ESG/sustainability relevance
+- ESG/sustainability relevance (how does this impact ESG KPIs?)
 - Risk considerations
 - Opportunity identification
 
 **RECOMMENDED ACTION:** Specific next step (e.g., "Engage suppliers on X", "Monitor Y closely", "Prepare contingency for Z")
 
 **SOURCE:** Cite source and date
+
+**ESG KPI IMPACT:** How does this affect key ESG metrics (data coverage, Scope 3 emissions, supplier diversity)?
 
 Focus on:
 - Market trends affecting hospitality services
@@ -120,11 +182,14 @@ Prioritize actionable, procurement-relevant insights. Be specific and current ({
             st.markdown(content)
 
 # =====================================================
-# TAB 2 — CATEGORY STRATEGY (YOUR ORIGINAL)
+# TAB 2 — CATEGORY STRATEGY
 # =====================================================
 with tab2:
     st.header("Category Strategy")
-
+    
+    # Tab-specific scorecard context
+    display_esg_scorecard("strategy")
+    
     category = st.selectbox(
         "Service Category",
         [
@@ -165,7 +230,8 @@ Region: {region}
 
 Group as Local/Regional and International.
 For each supplier include:
-name, coverage, strengths, estimated revenue, website.
+name, coverage, strengths, estimated revenue, website, ESG credentials.
+Include how each supplier impacts ESG KPIs (data coverage, emissions, diversity).
 """
         else:
             prompt = f"""
@@ -177,23 +243,28 @@ Objective: {objective}
 Current status: {current_status}
 
 Output:
-CURRENT STATUS
-KEY GAPS
-SHORT-TERM ACTIONS (0–6 months)
-LONG-TERM ACTIONS (6–18 months)
-Include ESG and decarbonisation considerations where relevant.
+CURRENT STATUS (include current ESG KPIs for this category)
+KEY GAPS (highlight ESG gaps)
+SHORT-TERM ACTIONS (0–6 months) - include ESG actions
+LONG-TERM ACTIONS (6–18 months) - include ESG targets
+ESTIMATED ESG KPI IMPACT (how this strategy moves the scorecard)
+
+Include ESG and decarbonisation considerations throughout.
 """
         with st.spinner("Generating category strategy..."):
             content = call_perplexity(prompt, temperature=0.2)
             st.markdown(content)
 
 # =====================================================
-# TAB 3 — SUPPLIER INTELLIGENCE (NEW – REPLACES SUPPLIER EVALUATION)
+# TAB 3 — SUPPLIER INTELLIGENCE
 # =====================================================
 with tab3:
     st.header("Supplier Intelligence & ESG Scoring")
     st.markdown("Deep-dive analysis of supplier capabilities, ESG credentials, and market positioning.")
-
+    
+    # Tab-specific scorecard context
+    display_esg_scorecard("supplier")
+    
     st.subheader("Analyze Existing Supplier")
 
     supplier_name = st.text_input("Supplier Name", placeholder="E.g., ISS Facility Services, Ecolab, Bunzl")
@@ -233,46 +304,19 @@ Region: {supplier_region}
 Generate a comprehensive supplier profile:
 
 COMPANY OVERVIEW
-- Headquarters, size (revenue, employees)
-- Market position in hospitality
-- Geographic coverage (especially {supplier_region})
-- Key hospitality clients (if known)
-
 SERVICE CAPABILITIES
-- Core offerings in {supplier_category}
-- Technology/innovation capabilities
-- Quality certifications (ISO, etc.)
-
 ESG PERFORMANCE (Critical for 2026)
-- Carbon commitments (SBTi, net zero targets)
-- Environmental certifications (ISO 14001, etc.)
-- Social/labor practices (living wage, diversity)
-- ESG reporting maturity (CDP, EcoVadis, etc.)
-- Product Carbon Footprint (PCF) data availability
-
 FINANCIAL STABILITY
-- Revenue trend
-- Credit rating or financial health indicators
-- Investment in sustainability
-
 HOSPITALITY EXPERIENCE
-- Years serving hotel sector
-- Notable hotel partnerships
-- Understanding of hospitality operations
-
 STRENGTHS & RISKS
-- Top 3 competitive advantages
-- Top 3 risk factors (financial, operational, reputational)
-
 NEGOTIATION INSIGHTS
-- Market position (pricing power)
-- Differentiators to leverage
-- Potential pressure points
-
 RECOMMENDATION
-- Tier classification (Strategic / Preferred / Approved / Caution)
-- Ideal contract structure
-- Next steps for engagement
+
+**ESG KPI IMPACT:** How does this supplier move our ESG scorecard?
+- ESG Data Coverage: Does it report PCF, CDP, etc.?
+- Scope 3 Emissions: Carbon reduction potential
+- Supplier Diversity: Local/SME status
+- ESG Tenders: Compliance with our ESG criteria
 
 Use current 2026 data where available. Be specific and cite sources.
 """
@@ -282,8 +326,7 @@ Use current 2026 data where available. Be specific and cite sources.
 
     st.markdown("---")
     st.subheader("Discover New Suppliers")
-    st.markdown("Find pre-vetted suppliers with strong ESG credentials in your target markets.")
-
+    
     col3, col4 = st.columns(2)
     with col3:
         discover_category = st.selectbox(
@@ -314,40 +357,37 @@ Region: {discover_region}
 Provide a shortlist of 6–8 suppliers (mix of established and emerging):
 
 For each supplier include:
-
 SUPPLIER NAME
-- Coverage: Geographic reach (local vs. international)
+- Coverage: Geographic reach
 - Size: Revenue estimate, employee count
 - Hospitality Focus: % of business from hotels, key clients
 - ESG Credentials: Key certifications, carbon commitments
 - Strengths: 2–3 differentiators relevant to hospitality
 - Typical Pricing: Premium / Mid-range / Competitive
 - Website: URL
+- ESG KPI Impact: How it moves our scorecard
 
 Group into:
-1. TIER 1: Market Leaders (established, broad coverage)
-2. TIER 2: Regional Champions (strong local presence)
-3. TIER 3: Emerging/Innovative (specialist, sustainable)
+1. TIER 1: Market Leaders
+2. TIER 2: Regional Champions  
+3. TIER 3: Emerging/Innovative
 
-Prioritize suppliers with:
-- Proven hospitality experience
-- Strong ESG credentials (SBTi, ISO 14001, EcoVadis Gold/Platinum)
-- Presence in {discover_region}
-- Competitive pricing
-
-Be specific and current (2026 market).
+Prioritize suppliers with strong ESG credentials and hospitality experience.
 """
         with st.spinner("Searching supplier landscape..."):
             content = call_perplexity(prompt, temperature=0.25)
             st.markdown(content)
 
 # =====================================================
-# TAB 4 — TENDER PREPARATION ASSISTANT (NEW – REPLACES NEGOTIATION INTELLIGENCE)
+# TAB 4 — TENDER PREPARATION ASSISTANT
 # =====================================================
 with tab4:
     st.header("AI Tender Preparation Assistant")
     st.markdown("Generate RFI/RFP templates with ESG KPIs and evaluation criteria tailored to your category and region.")
-
+    
+    # Tab-specific scorecard context
+    display_esg_scorecard("tender")
+    
     col1, col2 = st.columns(2)
     with col1:
         tender_category = st.selectbox(
@@ -401,55 +441,23 @@ Requirements / Context: {tender_context}
 Generate a complete, ready-to-use document with:
 
 1. INTRODUCTION & BACKGROUND
-- About Accor and Astore
-- Scope of services required
-- Contract value and duration
-- Number of properties/locations
-
 2. TECHNICAL REQUIREMENTS
-- Service specifications for {tender_category}
-- Quality standards and SLAs
-- Technology/system requirements
-- Reporting requirements
-
 3. ESG & SUSTAINABILITY REQUIREMENTS (CRITICAL for 2026)
-- Mandatory certifications (ISO 14001, etc.)
-- Carbon reporting requirements (Scope 1, 2, 3)
-- Social compliance (living wage, modern slavery)
-- Circular economy commitments (where relevant)
-- Diversity and inclusion metrics
-- CSRD-aligned data requirements
-
+   - Mandatory ESG KPIs and reporting standards
+   - How suppliers will contribute to our ESG scorecard
 4. EVALUATION CRITERIA & WEIGHTINGS
-Provide a specific scoring matrix:
-- Technical capability (X%)
-- ESG performance (X%)
-- Price competitiveness (X%)
-- Experience & references (X%)
-- Innovation & value-add (X%)
-
-For each criterion, define:
-- What will be evaluated
-- Scoring scale (e.g., 1–5 points)
-- Minimum threshold
-
+   - ESG performance: XX% weight
+   - Specific ESG scoring criteria
 5. SUPPLIER INFORMATION REQUIRED
-- Company profile
-- Financial statements
-- Client references
-- Certifications
-- ESG documentation
-
 6. SUBMISSION REQUIREMENTS
-- Format and structure
-- Deadline
-- Contact information
-
 7. KEY QUESTIONS TO ASK SUPPLIERS
-- 10–15 specific questions for {tender_category}
-- Include both technical and ESG questions
 
-Make it practical, professional, and hospitality-specific. Use clear language suitable for suppliers.
+**ESG KPI ALIGNMENT:** Ensure the tender drives improvements in:
+- ESG Data Coverage (target: 85%)
+- Scope 3 Emissions reduction
+- Supplier diversity targets
+
+Make it practical, professional, and hospitality-specific.
 """
         with st.spinner("Creating tender documentation..."):
             content = call_perplexity(prompt, temperature=0.2)
