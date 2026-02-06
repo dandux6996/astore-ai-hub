@@ -9,7 +9,6 @@ from datetime import datetime
 # =============================
 PPLX_API_KEY = "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"
 API_URL = "https://api.perplexity.ai/chat/completions"
-NEGOTIATION_DB = "negotiation_learnings.json"
 
 st.set_page_config(
     page_title="AI (Astore Insights) Hub",
@@ -19,10 +18,11 @@ st.set_page_config(
 st.title("AI (Astore Insights) Hub")
 
 # =====================================================
-# ESG SCORECARD (NEW - APPEARS ON EVERY TAB)
+# ESG SCORECARD (SINGLE LOCATION - BETWEEN TITLE AND TABS)
 # =====================================================
-def display_esg_scorecard(tab_context="general"):
+def display_esg_scorecard():
     """Displays ESG scorecard with estimated KPIs"""
+    st.markdown("### 📊 ESG Performance Scorecard")
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
@@ -72,12 +72,12 @@ def display_esg_scorecard(tab_context="general"):
     
     st.markdown("---")
 
-# Call scorecard once at top
-display_esg_scorecard("dashboard")
+# Display scorecard once between title and tabs
+display_esg_scorecard()
 
 tab1, tab2, tab3, tab4 = st.tabs([
     "Industry & Category Intelligence",
-    "Category Strategy",
+    "Category Strategy", 
     "Supplier Intelligence",
     "Tender Preparation Assistant"
 ])
@@ -106,9 +106,7 @@ def call_perplexity(prompt, temperature=0.2):
 # =====================================================
 with tab1:
     st.header("Industry & Category Intelligence")
-    
-    # Tab-specific scorecard context
-    display_esg_scorecard("intelligence")
+    st.markdown("**Real-time market intelligence, trends, and procurement-relevant insights across hospitality services**")
     
     focus_area = st.selectbox(
         "Focus area",
@@ -186,9 +184,7 @@ Prioritize actionable, procurement-relevant insights. Be specific and current ({
 # =====================================================
 with tab2:
     st.header("Category Strategy")
-    
-    # Tab-specific scorecard context
-    display_esg_scorecard("strategy")
+    st.markdown("**Generate data-driven strategies that balance cost optimization, service quality, and ESG objectives**")
     
     category = st.selectbox(
         "Service Category",
@@ -219,7 +215,12 @@ with tab2:
         key="cat_objective"
     )
 
-    current_status = st.text_area("Current category status", height=120, key="cat_status")
+    current_status = st.text_area(
+        "Current category status", 
+        height=120, 
+        placeholder="E.g., Currently 8 housekeeping suppliers across DACH with inconsistent ESG reporting. Labor shortages in Q4 2025. No Scope 3 data available. Seeking to reduce suppliers to 3-4 while improving carbon transparency...",
+        key="cat_status"
+    )
 
     if st.button("Generate Output", key="cat_generate"):
         if objective == "Find Suppliers":
@@ -256,14 +257,11 @@ Include ESG and decarbonisation considerations throughout.
             st.markdown(content)
 
 # =====================================================
-# TAB 3 — SUPPLIER INTELLIGENCE
+# TAB 3 — SUPPLIER INTELLIGENCE (NO ESG IN TITLE)
 # =====================================================
 with tab3:
-    st.header("Supplier Intelligence & ESG Scoring")
-    st.markdown("Deep-dive analysis of supplier capabilities, ESG credentials, and market positioning.")
-    
-    # Tab-specific scorecard context
-    display_esg_scorecard("supplier")
+    st.header("Supplier Intelligence")
+    st.markdown("**Deep-dive analysis of supplier capabilities, ESG credentials, and market positioning**")
     
     st.subheader("Analyze Existing Supplier")
 
@@ -326,6 +324,7 @@ Use current 2026 data where available. Be specific and cite sources.
 
     st.markdown("---")
     st.subheader("Discover New Suppliers")
+    st.markdown("*Find pre-vetted suppliers with strong ESG credentials in your target markets*")
     
     col3, col4 = st.columns(2)
     with col3:
@@ -382,11 +381,8 @@ Prioritize suppliers with strong ESG credentials and hospitality experience.
 # TAB 4 — TENDER PREPARATION ASSISTANT
 # =====================================================
 with tab4:
-    st.header("AI Tender Preparation Assistant")
-    st.markdown("Generate RFI/RFP templates with ESG KPIs and evaluation criteria tailored to your category and region.")
-    
-    # Tab-specific scorecard context
-    display_esg_scorecard("tender")
+    st.header("Tender Preparation Assistant")
+    st.markdown("**Generate RFI/RFP templates with ESG KPIs and evaluation criteria tailored to your category and region**")
     
     col1, col2 = st.columns(2)
     with col1:
