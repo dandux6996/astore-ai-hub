@@ -789,7 +789,7 @@
 
     <script>
         // Replace this with your actual Perplexity API key
-        const PPLX_API_KEY = "YOUR_API_KEY_HERE";
+        const PPLX_API_KEY = "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";
         const API_URL = "https://api.perplexity.ai/chat/completions";
 
         function switchTab(tabId) {
@@ -1240,3 +1240,4 @@ Make it practical, professional, and hospitality-specific. Use clear language su
     </script>
 </body>
 </html>
+
